@@ -5,6 +5,7 @@ import { CMSDOMAIN } from "@/utils";
 import { isEmpty } from "lodash";
 import nextConnect from "next-connect";
 
+// 调用 http://localhost:3000/api/layout
 //BFF 将 cms数据座层过滤包装 axios
 const getLayoutData = nextConnect()
   // .use(any middleware)
