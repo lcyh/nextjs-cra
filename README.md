@@ -37,3 +37,11 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+## nextjs项目的接口数据层,CMS系统提供-基于create-strapi-app
+
+[CMS脚手架-create-strapi-app](https://docs.strapi.io/developer-docs/latest/getting-started/quick-start.html#_1-install-strapi-and-create-a-new-project)
+
+```js
+https://github.com/lcyh/nextjs-cms
+
+```
