@@ -1,9 +1,10 @@
-import '../styles/globals.css'
+// import '../styles/globals.css'
+import "./global.scss";
 import App from 'next/app'
 import type { AppProps, AppContext } from 'next/app'
 import Head from 'next/head'
 import { Layout, ILayoutProps } from '@/components/layout'
-import code from "@/public/code.png";
+import { ThemeContextProvider } from "@/stores/theme";
 import axios from "axios";
 import { LOCALDOMAIN } from "@/utils";
 
@@ -17,9 +18,11 @@ function MyApp(data: AppProps & ILayoutProps) {
                 <meta name="description" content="A Demo for 《深入浅出SSR官网开发指南》" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Layout navbarData={navbarData} footerData={footerData}>
-                <Component {...pageProps} />
-            </Layout>
+            <ThemeContextProvider>
+                <Layout navbarData={navbarData} footerData={footerData}>
+                    <Component {...pageProps} />
+                </Layout>
+            </ThemeContextProvider>
         </div>
     )
 }
