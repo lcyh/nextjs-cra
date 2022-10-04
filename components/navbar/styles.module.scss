@@ -20,18 +20,16 @@
       background-size: 4.375rem 1.25rem;
       background-repeat: no-repeat;
     }
-  
+    .popupText {
+        margin-right: 1rem;
+        cursor: pointer;
+        color: var(--primary-color);
+      }
     .themeArea {
       display: flex;
       align-items: center;
       color: var(--primary-color);
       font-size: 0.875rem;
-  
-      .popupText {
-        margin-right: 1rem;
-        cursor: pointer;
-      }
-  
       .text {
         margin-right: 1rem;
       }
