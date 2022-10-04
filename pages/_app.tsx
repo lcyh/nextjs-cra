@@ -6,6 +6,7 @@ import Head from 'next/head'
 import { Layout, ILayoutProps } from '@/components/layout'
 import { ThemeContextProvider } from "@/stores/theme";
 import { UserAgentProvider } from "@/stores/userAgent";
+import { LanguageContext, LanguageContextProvider } from "@/stores/language";
 import axios from "axios";
 import { getIsMobile, LOCALDOMAIN } from "@/utils";
 
@@ -21,12 +22,14 @@ function MyApp(data: AppProps & ILayoutProps & { isMobile: boolean }) {
             </Head>
             <ThemeContextProvider>
                 <UserAgentProvider>
-                    <Layout navbarData={navbarData} footerData={footerData}>
-                        <Component {...pageProps} />
-                    </Layout>
+                    <LanguageContextProvider>
+                        <Layout navbarData={navbarData} footerData={footerData}>
+                            <Component {...pageProps} />
+                        </Layout>
+                    </LanguageContextProvider>
                 </UserAgentProvider>
             </ThemeContextProvider>
-        </div>
+        </div >
     )
 }
 MyApp.getInitialProps = async (context: AppContext) => {
