@@ -1,3 +1,5 @@
+@import "../../pages/media.scss";
+
 .footer {
     padding: 70px 145px;
     background-color: var(--footer-background-color);
@@ -81,5 +83,56 @@
           }
         }
       }
+    }
+  }
+
+  @media screen and (min-width:48.6875rem) and (max-width:54.125rem){ //779px-866px
+    .footer {
+        .topArea {
+          .footerTitle {
+            margin-bottom: 1.25rem;
+          }
+        }
+      }
+  }
+
+  @media screen and (max-width:48.6875rem){//779px
+    .footer {
+        .topArea {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .footerTitle {
+            margin-bottom: 2.5rem;
+          }
+          .linkListArea {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            .linkArea {
+              margin-left: 0;
+            }
+          }
+        }
+        .bottomArea {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+      
+            .codeArea {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+      
+              .text {
+                text-align: center;
+                margin: 20px 0;
+              }
+            }
+        }
+        .numArea {
+            align-items: center;
+            text-align: center;
+        }
     }
   }
