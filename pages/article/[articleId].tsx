@@ -1,25 +1,47 @@
+import { LOCALDOMAIN } from "@/utils";
+import axios from "axios";
 import { NextPage } from "next";
-
+import styles from './styles.module.scss'
+import showdown from 'showdown'
 /**
  * Nextjs 的文件约定式路由
  ./pages/home/index.tsx => /home
  ./pages/demo/[id].tsx => /demo/:id
  */
 interface IProps {
-    articleId: number;
+    title: string,
+    author: string,
+    description: string,
+    createTime: string,
+    content: string,
 }
-const Article: NextPage<IProps> = ({ articleId }) => {
+const Article: NextPage<IProps> = ({
+    title,
+    author,
+    description,
+    createTime,
+    content,
+}) => {
+    const converter = new showdown.Converter()
     return (
-        <div>
-            <h1>文章{articleId}</h1>
+        <div className={styles.article}>
+            <h1 className={styles.title}>{title}</h1>
+            <div className={styles.info}>
+                作者：{author} | 创建时间: {createTime}
+            </div>
+            <div className={styles.description}>{description}</div>
+            <div
+                className={styles.content}
+                dangerouslySetInnerHTML={{ __html: converter.makeHtml(content) }} />
         </div>
     );
 };
-Article.getInitialProps = (context) => {
+Article.getInitialProps = async (context) => {
     const { articleId } = context.query;
-    return {
-        articleId: Number(articleId),
-    };
+    const { data } = await axios.get(`${LOCALDOMAIN}/api/articleInfo`, {
+        params: { articleId }
+    })
+    return data
 };
 
 export default Article;

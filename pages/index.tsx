@@ -1,22 +1,33 @@
 import type { NextPage } from 'next'
-import { useContext, useRef, useEffect } from 'react';
+import { useContext, useRef, useEffect, useState } from 'react';
 import cName from "classnames";
 import styles from './index.module.scss'
 import { ThemeContext } from '@/stores/theme';
+import { Pagination } from '@douyinfe/semi-ui'
+import axios from 'axios';
+import { CMSDOMAIN, LOCALDOMAIN } from '@/utils';
+
+interface IArticleItem {
+    label: string;
+    info: string;
+    link: string;
+    articleId: number
+}
 
 interface IProps {
     title: string;
     description: string;
-    list: {
-        label: string;
-        info: string;
-        link: string;
-    }[];
+    articles: IContentProps
+}
+type IContentProps = {
+    list: IArticleItem[];
+    total: number
 }
 // 首页 - 默认的 index.tsx
-const Home: NextPage<IProps> = ({ title, description, list }) => {
+const Home: NextPage<IProps> = ({ title, description, articles }) => {
     const mainRef = useRef<HTMLDivElement>(null);
     const { theme } = useContext(ThemeContext);
+    const [content, setContent] = useState<IContentProps>(articles as IContentProps)
     useEffect(() => {
         mainRef.current?.classList.remove(styles.withAnimation)
         window.requestAnimationFrame(() => {
@@ -31,7 +42,7 @@ const Home: NextPage<IProps> = ({ title, description, list }) => {
                 <p className={styles.description}>{description}</p>
 
                 <div className={styles.grid}>
-                    {list?.map((item, index) => {
+                    {content?.list?.map((item, index) => {
                         return (
                             <div
                                 key={index}
@@ -50,46 +61,53 @@ const Home: NextPage<IProps> = ({ title, description, list }) => {
                         );
                     })}
                 </div>
+                <div className={styles.paginationArea}>
+                    <Pagination
+                        total={content?.total}
+                        pageSize={6}
+                        onPageChange={(pageNo) => {
+                            axios.post(`${LOCALDOMAIN}/api/articleIntro`,
+                                {
+                                    pageNo,
+                                    pageSize: 6,
+                                }).then(({ data }) => {
+                                    setContent({
+                                        list: data.list.map((item: IArticleItem) => {
+                                            return {
+                                                ...item,
+                                                link: `${LOCALDOMAIN}/article/${item.articleId}`
+                                            }
+                                        }),
+                                        total: data.total,
+                                    })
+                                })
+                        }
+                        }
+                    />
+                </div>
             </main>
         </div>
     );
 };
-Home.getInitialProps = (context) => {
+Home.getInitialProps = async (context) => {
+    const { data: homeData } = await axios.get(`${LOCALDOMAIN}/api/home`)
+    const { data: articleData } = await axios.post(`${LOCALDOMAIN}/api/articleIntro`,
+        {
+            pageNo: 1,
+            pageSize: 6,
+        })
     return {
-        title: "Hello SSR!",
-        description: "A Demo for 《深入浅出SSR官网开发指南》",
-        list: [
-            {
-                label: "文章1",
-                info: "A test for article1",
-                link: "http://localhost:3000/article/1",
-            },
-            {
-                label: "文章2",
-                info: "A test for article2",
-                link: "http://localhost:3000/article/2",
-            },
-            {
-                label: "文章3",
-                info: "A test for article3",
-                link: "http://localhost:3000/article/3",
-            },
-            {
-                label: "文章4",
-                info: "A test for article4",
-                link: "http://localhost:3000/article/4",
-            },
-            {
-                label: "文章5",
-                info: "A test for article5",
-                link: "http://localhost:3000/article/5",
-            },
-            {
-                label: "文章6",
-                info: "A test for article6",
-                link: "http://localhost:3000/article/6",
-            },
-        ],
+        title: homeData.title,
+        description: homeData.description,
+        articles: {
+            list: articleData.list.map((item: IArticleItem) => {
+                return {
+                    ...item,
+                    link: `${LOCALDOMAIN}/article/${item.articleId}`
+                }
+            }),
+            total: articleData.total,
+        },
     };
 };
 export default Home
